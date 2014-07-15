@@ -3,8 +3,8 @@ import java.util.*;
 import java.awt.*;
 public class Search{
   ArrayList<Integer> passedStationNumber = new ArrayList<Integer>();
-  int data[][], flag[][], stationCost[], startNumber, goalNumber,n;
-  String station[], goal, start, minRoute, minCost, fileName;;
+  int data[][], flag[][], stationCost[], startNumber, goalNumber,n,minCost;
+  String station[], goal, start, minRoute, fileName;;
 //呼び出しコンストラクタリスト
 /*
   main(args[]);
@@ -86,10 +86,10 @@ public class Search{
         String str = br.readLine();
         if(row < n){
           station[row] = str;
-          if(start.equals(station[row]) || start.equals(station[row].toLowerCase())){
+          if(isStationStartName(row)){
             startNumber = row;
           }
-          if(goal.equals(station[row]) || goal.equals(station[row].toLowerCase())){
+          if(isStationGoalName(row)){
             goalNumber = row;
           }
         }else{
@@ -104,28 +104,53 @@ public class Search{
       e.printStackTrace();
     }
   }
+
+  private boolean isStationStartName(int row){
+    return start.equals(station[row]) || start.equals(station[row].toLowerCase());
+  }
+  private boolean isStationGoalName(int row){
+    return goal.equals(station[row]) || goal.equals(station[row].toLowerCase());
+  }
 //----------------------------[StationWay]----------------------------------
   private void StationWay(String route, int stationNumber, int cost){
     if(isStationGoal(stationNumber)){
       System.out.println("this is Goal!");
+      if(isCostLowerThanMinCost(cost)){
+        minCost = cost;
+        System.out.println("this cost is" + minCost);
+      }
+      return;
     }
 
     int i;
     for(i=0;i<n;i++){
       if(isStationExist(stationNumber,i)){
-           System.out.println("data is" + data[stationNumber][i]);
-       }
+        if(!isStationAlreadyThrough(i)){
+          route += station[stationNumber] + "->";
+          cost += data[stationNumber][i];
+          passedStationNumber.add(stationNumber);
+          // System.out.println(route);
+          // System.out.println("data is" + data[stationNumber][i]);
+          StationWay(route, i, cost);
+        }
+      }
     }
-    System.out.println("るーと"+route);
-    System.out.println("駅番号"+stationNumber);
-    System.out.println("コスト"+cost);
+    // System.out.println("るーと"+route);
+    // System.out.println("駅番号"+stationNumber);
+    // System.out.println("コスト"+cost);
   }
 
+  private boolean isCostLowerThanMinCost(int cost){
+    return minCost == 0 || minCost > cost;
+  }
   private boolean isStationGoal(int from){
     return from == goalNumber;
   }
   private boolean isStationExist(int i, int j){
     return data[i][j] != 0;
+  }
+  private boolean isStationAlreadyThrough(int i){
+    return passedStationNumber.indexOf(i) > -1;
   }
 //----------------------------[confirm]-------------------------------------
   private void Confirm(){
