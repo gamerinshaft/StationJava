@@ -7,9 +7,9 @@ public class Search{
   String station[], goal, start, minRoute, minCost, fileName;;
 //呼び出しコンストラクタリスト
 /*
-  main();
+  main(args[]);
   ⇩
-    Search();
+    Search(args[]);
     ⇩
       DefaultSettings();
       EntryValue();
@@ -17,6 +17,7 @@ public class Search{
         AcceptValueFromUser();
         InsertValueAddedByUser();
     ⇩
+      StationWay(String route, int stationNumber, int cost);
       Confirm();
 
 */
@@ -103,23 +104,28 @@ public class Search{
       e.printStackTrace();
     }
   }
-//--------------------------------------------------------------------------
+//----------------------------[StationWay]----------------------------------
   private void StationWay(String route, int stationNumber, int cost){
-    if(IsStationNumberGoal(stationNumber)){
+    if(isStationGoal(stationNumber)){
       System.out.println("this is Goal!");
     }
 
     int i;
     for(i=0;i<n;i++){
-     System.out.println("data is" + data[stationNumber][i]);
+      if(isStationExist(stationNumber,i)){
+           System.out.println("data is" + data[stationNumber][i]);
+       }
     }
     System.out.println("るーと"+route);
     System.out.println("駅番号"+stationNumber);
     System.out.println("コスト"+cost);
   }
 
-  private boolean IsStationNumberGoal(int from){
+  private boolean isStationGoal(int from){
     return from == goalNumber;
+  }
+  private boolean isStationExist(int i, int j){
+    return data[i][j] != 0;
   }
 //----------------------------[confirm]-------------------------------------
   private void Confirm(){
