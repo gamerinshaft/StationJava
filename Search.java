@@ -34,7 +34,7 @@ public class Search{
     DefaultSettings();
     EntryValue();
     StationWay("",startNumber,0);
-    Confirm();
+    // Confirm();
   }
 
 //--------------------------[DefaultSettings]-------------------------------
@@ -117,7 +117,11 @@ public class Search{
       System.out.println("this is Goal!");
       if(isCostLowerThanMinCost(cost)){
         minCost = cost;
-        System.out.println("this cost is" + minCost);
+        minRoute = route + station[stationNumber];
+        System.out.println("----------------------------------------------------");
+        System.out.println("this cost is " + minCost);
+        System.out.println("this route is " + minRoute);
+        System.out.println("----------------------------------------------------");
       }
       return;
     }
@@ -129,8 +133,8 @@ public class Search{
           route += station[stationNumber] + "->";
           cost += data[stationNumber][i];
           passedStationNumber.add(stationNumber);
-          // System.out.println(route);
-          // System.out.println("data is" + data[stationNumber][i]);
+          System.out.println(route);
+          System.out.println("data is" + data[stationNumber][i]);
           StationWay(route, i, cost);
         }
       }
