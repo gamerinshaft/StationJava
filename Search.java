@@ -4,8 +4,9 @@ import java.awt.*;
 public class Search{
   ArrayList<Integer> passedStationNumber = new ArrayList<Integer>();
   int data[][], stationCost[], startNumber, goalNumber, n, minCost;
-  String station[], goal, start, minRoute, fileName, route;
-
+  String station[], minRoute, fileName, route, goal, start;
+  boolean isStartExist = false;
+  boolean isGoalExist = false;
 //-------------------------------[main]-------------------------------------
   public static void main(String args[]){
     new Search(args);
@@ -31,14 +32,17 @@ public class Search{
 
 //----------------------------[EntryValue]----------------------------------
   private void EntryValue(){
-    AcceptValueFromUser();
-    InsertValueAddedByUser();
+    do{
+      AcceptValueFromUser();
+      InsertValueAddedByUser();
+    }while(!isGoalExist || !isStartExist);
   }
 
 //------------------------[AcceptValueFromUser]-----------------------------
   private void AcceptValueFromUser(){
     try{
       BufferedReader input;
+      System.out.println("サンプルデータ内に存在する駅名を入力して下さい。");
       System.out.println("From?");
       input = new BufferedReader (new InputStreamReader (System.in));
       start = input.readLine( );
@@ -65,9 +69,11 @@ public class Search{
           station[row] = str;
           if(isStationStartName(row)){
             startNumber = row;
+            isStartExist = true;
           }
           if(isStationGoalName(row)){
             goalNumber = row;
+            isGoalExist = true;
           }
         }else{
           String[]tmp = str.split(" ");
