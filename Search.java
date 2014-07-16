@@ -133,7 +133,7 @@ public class Search{
       // System.out.println("--------------"+ passedStationNumber.size() + "層目" + i + "回目----------");
       // System.out.println(route);
       if(isStationExist(stationNumber,i) && !isStationAlreadyThrough(i)){
-        if(stationCost[i] == 0 || cost + data[stationNumber][i] <= stationCost[i]){
+        if(isStationCostNullOrHigher(stationNumber, cost, i)){
           stationCost[stationNumber] = cost;
           beforeRoute = route;
           route += "->" + station[i] ;
@@ -176,13 +176,8 @@ public class Search{
   private boolean isStationAlreadyThrough(int i){
     return passedStationNumber.indexOf(i) > -1;
   }
-//----------------------------[confirm]-------------------------------------
-  private void Confirm(){
-    System.out.println(goalNumber);
-    System.out.println(startNumber);
-    System.out.println(passedStationNumber.size());
-    System.out.println(minRoute);
-    System.out.println(String.valueOf(minCost));
+
+  private boolean isStationCostNullOrHigher(int stationNumber, int cost, int i){
+    return stationCost[i] == 0 || cost + data[stationNumber][i] <= stationCost[i];
   }
-//--------------------------------------------------------------------------
 }
