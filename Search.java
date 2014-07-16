@@ -3,7 +3,7 @@ import java.util.*;
 import java.awt.*;
 public class Search{
   ArrayList<Integer> passedStationNumber = new ArrayList<Integer>();
-  int data[][], flag[][], stationCost[], startNumber, goalNumber,n,minCost;
+  int data[][], stationCost[], startNumber, goalNumber, n, minCost;
   String station[], goal, start, minRoute, fileName, beforeRoute;
 //呼び出しコンストラクタリスト
 /*
@@ -27,7 +27,6 @@ public class Search{
     new Search(args);
   }
 //------------------------------[Search]------------------------------------
-
   public Search(String args[]){
     fileName = args[0];
     n = Integer.parseInt(args[1]);
@@ -36,24 +35,12 @@ public class Search{
     StationWay(station[startNumber],startNumber,0);
     System.out.println(minRoute);
     System.out.println(minCost);
-    // Confirm();
   }
-
 //--------------------------[DefaultSettings]-------------------------------
   private void DefaultSettings(){
-    int i;
-    int j;
     data = new int[n][n]; // n × n の距離を格納する二次元配列を作成
-    flag = new int[n][n];
     station = new String[n]; // n個の駅名を格納する文字列配列を作成
-    //flagの初期化
     stationCost = new int[n];
-    for(i=0;i<n;i++){
-      for(j=0;j<n;j++){
-        flag[i][j] = 1;
-      }
-      stationCost[i] = 0;
-    }
   }
 //----------------------------[EntryValue]----------------------------------
   private void EntryValue(){
@@ -115,6 +102,7 @@ public class Search{
   }
 //----------------------------[StationWay]----------------------------------
   private void StationWay(String route, int stationNumber, int cost){
+    int i;
     if(isStationGoal(stationNumber)){
       // System.out.println("this is Goal!");
       if(isCostLowerThanMinCost(cost)){
@@ -127,8 +115,6 @@ public class Search{
       }
       return;
     }
-
-    int i;
     for(i=0;i<n;i++){
       // System.out.println("--------------"+ passedStationNumber.size() + "層目" + i + "回目----------");
       // System.out.println(route);
@@ -150,9 +136,8 @@ public class Search{
       // System.out.println("数字いず" + i );
       // System.out.println(passedStationNumber);
     }
-
     beforeRoute = "";
-    for(i=0;i<passedStationNumber.size();i++){
+    for(i = 0; i < passedStationNumber.size(); i++){
       if(i == passedStationNumber.size() - 1){
         beforeRoute += station[passedStationNumber.get(i)];
       }else{
@@ -167,12 +152,15 @@ public class Search{
   private boolean isCostLowerThanMinCost(int cost){
     return minCost == 0 || minCost > cost;
   }
+
   private boolean isStationGoal(int from){
     return from == goalNumber;
   }
+
   private boolean isStationExist(int i, int j){
     return data[i][j] != 0;
   }
+
   private boolean isStationAlreadyThrough(int i){
     return passedStationNumber.indexOf(i) > -1;
   }
