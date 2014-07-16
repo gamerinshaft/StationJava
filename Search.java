@@ -4,7 +4,7 @@ import java.awt.*;
 public class Search{
   ArrayList<Integer> passedStationNumber = new ArrayList<Integer>();
   int data[][], flag[][], stationCost[], startNumber, goalNumber,n,minCost;
-  String station[], goal, start, minRoute, fileName;;
+  String station[], goal, start, minRoute, fileName, beforeRoute;
 //呼び出しコンストラクタリスト
 /*
   main(args[]);
@@ -33,7 +33,7 @@ public class Search{
     n = Integer.parseInt(args[1]);
     DefaultSettings();
     EntryValue();
-    StationWay("",startNumber,0);
+    StationWay(station[startNumber],startNumber,0);
     // Confirm();
   }
 
@@ -117,26 +117,43 @@ public class Search{
       System.out.println("this is Goal!");
       if(isCostLowerThanMinCost(cost)){
         minCost = cost;
-        minRoute = route + station[stationNumber];
-        System.out.println("----------------------------------------------------");
+        minRoute = route;
+        System.out.println("**********************************");
         System.out.println("this cost is " + minCost);
         System.out.println("this route is " + minRoute);
-        System.out.println("----------------------------------------------------");
+        System.out.println("**********************************");
       }
       return;
     }
 
     int i;
     for(i=0;i<n;i++){
+      System.out.println("--------------"+ passedStationNumber.size() + "層目" + i + "回目----------");
+      System.out.println(route);
       if(isStationExist(stationNumber,i)){
         if(!isStationAlreadyThrough(i)){
-          route += station[stationNumber] + "->";
+          beforeRoute = route;
+          route += "->" + station[i] ;
           cost += data[stationNumber][i];
           passedStationNumber.add(stationNumber);
           System.out.println(route);
           System.out.println("data is" + data[stationNumber][i]);
           StationWay(route, i, cost);
+          System.out.println(cost);
+          route = beforeRoute;
+          cost -= data[startNumber][i];
+          passedStationNumber.remove(passedStationNumber.size() - 1);
         }
+      }
+      // System.out.println("数字いず" + i );
+      // System.out.println(passedStationNumber);
+    }
+
+    for(i=0;i<passedStationNumber.size();i++){
+      if(i == passedStationNumber.size() - 1){
+        beforeRoute = station[passedStationNumber.get(i)];
+      }else{
+        beforeRoute = station[passedStationNumber.get(i)] + "->";
       }
     }
     // System.out.println("るーと"+route);
