@@ -4,44 +4,31 @@ import java.awt.*;
 public class Search{
   ArrayList<Integer> passedStationNumber = new ArrayList<Integer>();
   int data[][], stationCost[], startNumber, goalNumber, n, minCost;
-  String station[], goal, start, minRoute, fileName, beforeRoute;
-//呼び出しコンストラクタリスト
-/*
-  main(args[]);
-  ⇩
-    Search(args[]);
-    ⇩
-      DefaultSettings();
-      EntryValue();
-      ⇩
-        AcceptValueFromUser();
-        InsertValueAddedByUser();
-    ⇩
-      StationWay(String route, int stationNumber, int cost);
-      Confirm();
-
-*/
+  String station[], goal, start, minRoute, fileName, route;
 
 //-------------------------------[main]-------------------------------------
   public static void main(String args[]){
     new Search(args);
   }
+
 //------------------------------[Search]------------------------------------
   public Search(String args[]){
     fileName = args[0];
     n = Integer.parseInt(args[1]);
     DefaultSettings();
     EntryValue();
-    StationWay(station[startNumber],startNumber,0);
+    StationWay(startNumber,0);
     System.out.println(minRoute);
     System.out.println(minCost);
   }
+
 //--------------------------[DefaultSettings]-------------------------------
   private void DefaultSettings(){
     data = new int[n][n]; // n × n の距離を格納する二次元配列を作成
     station = new String[n]; // n個の駅名を格納する文字列配列を作成
     stationCost = new int[n];
   }
+
 //----------------------------[EntryValue]----------------------------------
   private void EntryValue(){
     AcceptValueFromUser();
@@ -62,6 +49,7 @@ public class Search{
       e.printStackTrace();
     }
   }
+
 //----------------------[InsertValueAddedByUser]----------------------------
   private void InsertValueAddedByUser(){
     try{
@@ -100,53 +88,34 @@ public class Search{
   private boolean isStationGoalName(int row){
     return goal.equals(station[row]) || goal.equals(station[row].toLowerCase());
   }
+
 //----------------------------[StationWay]----------------------------------
-  private void StationWay(String route, int stationNumber, int cost){
+  private void StationWay(int stationNumber, int cost){
     int i;
     if(isStationGoal(stationNumber)){
-      // System.out.println("this is Goal!");
       if(isCostLowerThanMinCost(cost)){
         minCost = cost;
-        minRoute = route;
-        // System.out.println("**********************************");
-        // System.out.println("this cost is " + minCost);
-        // System.out.println("this route is " + minRoute);
-        // System.out.println("**********************************");
+        route = "";
+        for(i = 0; i < passedStationNumber.size(); i++){
+          route += station[passedStationNumber.get(i)] + "->";
+        }
+        minRoute = route + goal;
       }
       return;
     }
+
     for(i=0;i<n;i++){
-      // System.out.println("--------------"+ passedStationNumber.size() + "層目" + i + "回目----------");
-      // System.out.println(route);
       if(isStationExist(stationNumber,i) && !isStationAlreadyThrough(i)){
         if(isStationCostNullOrHigher(stationNumber, cost, i)){
           stationCost[stationNumber] = cost;
-          beforeRoute = route;
-          route += "->" + station[i] ;
           cost += data[stationNumber][i];
           passedStationNumber.add(stationNumber);
-          // System.out.println("data is" + data[stationNumber][i]);
-          StationWay(route, i, cost);
-          // System.out.println(cost);
-          route = beforeRoute;
+          StationWay(i, cost);
           cost -= data[stationNumber][i];
           passedStationNumber.remove(passedStationNumber.size() - 1);
         }
       }
-      // System.out.println("数字いず" + i );
-      // System.out.println(passedStationNumber);
     }
-    beforeRoute = "";
-    for(i = 0; i < passedStationNumber.size(); i++){
-      if(i == passedStationNumber.size() - 1){
-        beforeRoute += station[passedStationNumber.get(i)];
-      }else{
-        beforeRoute += station[passedStationNumber.get(i)] + "->";
-      }
-    }
-    // System.out.println("るーと"+route);
-    // System.out.println("駅番号"+stationNumber);
-    // System.out.println("コスト"+cost);
   }
 
   private boolean isCostLowerThanMinCost(int cost){
