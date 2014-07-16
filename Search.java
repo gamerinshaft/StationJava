@@ -24,8 +24,8 @@ public class Search{
 
 //--------------------------[DefaultSettings]-------------------------------
   private void DefaultSettings(){
-    data = new int[n][n]; // n × n の距離を格納する二次元配列を作成
-    station = new String[n]; // n個の駅名を格納する文字列配列を作成
+    data = new int[n][n];
+    station = new String[n];
     stationCost = new int[n];
   }
 
