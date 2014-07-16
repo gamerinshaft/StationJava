@@ -15,48 +15,343 @@
 提出する事が出来ませんでした。なので、遅れて出すからにはちゃんと速さにこだわろうと思い、色々試行錯誤してみる事にしました。
 条件として次のことを決めました。
 
-１、flagを使わない。
+\subsubsection{flagを使わない}
 ナップサックの問題で、flagを用いて解いていましたが、
-flagを使った場合、その駅数分、
-まず、コードを書く上で、最後のsampleの処理速度を5秒以内にするということを目標にしました。
-結果的に僕のPCでおよそ一秒(1.1~1.7)程で処理できるコードを書く事ができました。
+あれはアイテムに対しフラグを折る、折らないをしました。
+しかし今回の場合余り深くは考えていませんがフラグを折る、折らないをするのは
+今いる駅から次の到着駅へのレールに対してです。
+そうした場合駅数が 5駅の場合は自分から自分への移動も含めると 5 × 5 の 25通り、
+100駅あった場合は100 ×　100 の 10000通りもフラグがある事になります。
+これでは処理速度も遅いし、無駄なフラグもたくさん出てきてしまいます。そのため、これの使用はやめました。
+
+\subsubsection{for文は極力使わない}
+
+再帰的メソッドは、あたかもそれ自身がイテレータによってまわされているかのような振る舞いをします。
+そのため、その再帰的メソッドの内部で複数回for文をまわすのはどこか気持ち悪く、ナンセンスに感じました。
+なので、for文の使用頻度は必要最低限に押さえようと思いました。
+
+\subsubsection{デバッグはしやすく}
+
+再帰的なプログラムは、僕が知っているなかで1,2位を争うわかりにくさです。
+このブロックに入ったら、次にどこにいって、そのときの状態がどんなものなのかが想像しにくいです。
+そのため、本質的には余り関係のないところ、真偽判定の所などをわかりやすく書く事を求めました。
+
+\subsubsection{自分の想像に忠実に}
+
+自分が考えたアルゴリズムにあくまで忠実に振る舞ってくれるコードを考えました。
+コードを書いているとき、一番やってはいけないことは、
+"自分が何をやっているのかわからない、でもなんかできたからいいや"
+という思考です。これではヒエラルキー的立場が真逆になってしまいます。コードであそぶのではなく、コードにあそばれてしまっているのです。
+
+以上が、僕がこのコードを書く為に心がけたことです。次は具体的なアルゴリズムの説明をしようと思います。
+
+\subsection{何を引き継いでいくべきか}
+さて、アルゴリズムの具体的な説明です。
+次のようなものを考えました。
+
+\begin{itemize}
+\item 最寄り駅がゴールならば、そのゴールまでにかかったコストを他のルートでゴールしたときのものと比較し、
+そのコストより小さかった場合新しく最小コストのルートとして記録する。
+
+\item 最寄り駅から、通った駅以外に行ける駅が無いとき、一つ前の駅にもどり自分以外でまだ行ってない駅が無いか探す。
+
+\item 最寄り駅まで来るコストが、他のルートで来たときのコストよりも高い場合、そこで計算をやめる。
+\end{itemize}
+
+以上この三つが、僕がコードを書くときに考えた事です。
+２番は、一番最初から呼び直すより、一つ上に戻ったほうが無駄が無いと思ったからです。
+３番は、そこまでくるのに他のルートの方がコストが低かったら、そちらの方が最短に決まっているよね、という考えのもとで条件付けしました。
+
+このアルゴリズムの一番の味噌となるところは、その駅を通った事があるか否か、ということです。
+これをどうやって表現するかどうかで、迷いましたが、結果的にArrayListを用いる事で解決しました。
+ArrayListを上手く用いてあげる事によって、再帰的なプログラムで引き渡す値がコストと現在いる場所だけでよくなったのは嬉しい誤算でした。
+
+これらの考えのもと、完成させたプログラムは、最後のサンプルを僕のPCでおよそ一秒で解いてくれるプログラムとなりました。
+五秒以内、というのが目標でしたが、それより速く処理してくれたのは驚きでした。
 
 
 \section{プログラムの説明}
-四点を動かせるようにした事以外は、先生の授業でやったことなので省こうと思います。説明としてはみなさんと同じようなかんじです。なので、ウサギの四点のところの説明を少ししようとおもいます。
+プログラムの説明をしたいと思います。
+可読性向上のため、複数のコンストラクタをつくり、それを順に読込む事によってなるべくモジュール化し、
+互いに疎になるようにつとめました。
+最初に大まかなコンストラクタのおおまかな役割説明をします。
+
 \begin{verbatim}
-  if (flag1) {
-    double dy = e.getY()-py1;
-    double dx = e.getX()-px1;
-    r = Math.atan2(-dy,-dx);
-    deg = r * 180 / Math.PI;
-    usagi.turn(deg-deg2);
-    length = Math.sqrt(dy*dy + dx*dx);
-    usagi.move(length);
-    repaint();
-    px1 = e.getX();
-    py1 = e.getY();
-    px2 = e.getX();
-    py2 = py2 - dy;
-    px3 = px3 - dx;
-    py3 = e.getY();
-    px4 = px4 - dx;
-    py4 = py4 - dy;
-    deg2 = deg;
+main                   -> Searchを呼び出す。
+Search                 -> 今回のプログラム全ての源。
+DefaultSettings        -> 実行時に入力された第二引数を元に配列の要素数を定義
+EntryValue             -> した二つのコンストラクタを呼ぶユーザー入力にたいしての操作
+AcceptValueFromUser    -> ユーザーに最寄り駅と、最終地点の入力を求める
+InsertValueAddedByUser -> 入力された値を元に変数に値を代入していく
+StationWay             -> 最短距離を求めるプログラム
+\end{verbatim}
+
+それでは一つずつみていきます。
+
+\subsection{main}
+
+\begin{verbatim}
+  public static void main(String args[]){
+    new Search(args);
   }
 \end{verbatim}
-ソースコードをみてもらえればわかりますが、四点反応させる為にflagを四つ用意して、それぞれにflag1,flag2,flag3,flag4を用意しました。
-上記のはそれのflag1の部分を抜き出してきたものです。
-getY,getXメソッドで位置情報を獲得し、それを初期位置から引いたものが移動距離になるわけですね。py,pxはそれぞれの座標位置の変数です。py1,px1,py2,px2...px4,py4
-とあります。
-配列として作っても良かったのですが、flagの中身が各々変わっているので、配列として扱うメリットがなかったので作りませんでした。
-付け足した点と言えば、それぞれの座標の更新と、dy,dxの正負符号くらいだと思います。ここが地味に一番めんどくさかったです。
-残りのところは、コメントもつけているので、実際にコードを読んでみてもらえると嬉しいです。
+
+言うまでもないですね。javaコマンドを入力したときの引数をargsという配列で受け取って、それをSearchに渡しています。
+
+\subsection{Search}
+\begin{verbatim}
+  public Search(String args[]){
+    fileName = args[0];
+    n = Integer.parseInt(args[1]);
+    DefaultSettings();
+    EntryValue();
+    StationWay(startNumber,0);
+    System.out.println(minRoute);
+    System.out.println(minCost);
+  }
+\end{verbatim}
+
+第一引数で受け取ったものをfileNameという変数に代入。また、第二引数で受け取ったものをnという変数に代入しています。
+fileNameはopenするファイルの名前、nは駅の総数を受け取る事になっています。
+そして他のコンストラクタを呼び出した後、処理結果である最短距離と、コストを表示してくれます。
+
+\subsection{DefaultSettings}
+\begin{verbatim}
+  private void DefaultSettings(){
+    data = new int[n][n];
+    station = new String[n];
+    stationCost = new int[n];
+  }
+\end{verbatim}
+
+dataには二次元配列電車の相関マップデータが代入されます。それの配列の要素数を定義しました。
+station変数には、それぞれの行（列）番号の駅名、stationCostにはそれぞれの行（列）番号のコストを受け取ります。
+
+\subsection{EntryValue}
+\begin{verbatim}
+  private void EntryValue(){
+    do{
+      AcceptValueFromUser();
+      InsertValueAddedByUser();
+    }while(!isGoalExist || !isStartExist);
+  }
+\end{verbatim}
+
+ここではユーザー入力を求めること、その値をもとに変数にvalueを記録していく事をします。
+isGoalExist, isStartExistは共に真偽値を返す引数で、もし入力された値が存在していなかった場合、
+もう一度これらを呼び出すようになっています。
+
+\subsection{AcceptValueFromUser}
+\begin{verbatim}
+  private void AcceptValueFromUser(){
+    try{
+      BufferedReader input;
+      System.out.println("サンプルデータ内に存在する駅名を入力して下さい。");
+      System.out.println("From?");
+      input = new BufferedReader (new InputStreamReader (System.in));
+      start = input.readLine( );
+      System.out.println("To?");
+      input = new BufferedReader (new InputStreamReader (System.in));
+      goal = input.readLine( );
+    }catch(IOException e){
+      e.printStackTrace();
+    }
+  }
+\end{verbatim}
+
+BufferReaderを用いてユーザー入力を求めます。
+start, goal に値を代入します。
+
+\subsection{AcceptValueFromUser}
+\begin{verbatim}
+  private void InsertValueAddedByUser(){
+    try{
+      BufferedReader br;
+      FileReader fr;
+      int row = 0;
+      int i;
+      fr = new FileReader(fileName);
+      br = new BufferedReader(fr);
+      while (br.ready()) {
+        String str = br.readLine();
+        if(row < n){
+          station[row] = str;
+          if(isStationStartName(row)){
+            startNumber = row;
+            isStartExist = true;
+          }
+          if(isStationGoalName(row)){
+            goalNumber = row;
+            isGoalExist = true;
+          }
+        }else{
+          String[]tmp = str.split(" ");
+          for(i=0; i<n; i++){
+            data[row-n][i] = Integer.parseInt(tmp[i]);
+           }
+        }
+        row++;
+      }
+    }catch(IOException e){
+      e.printStackTrace();
+    }
+  }
+
+  private boolean isStationStartName(int row){
+    return start.equals(station[row]) || start.equals(station[row].toLowerCase());
+  }
+  private boolean isStationGoalName(int row){
+    return goal.equals(station[row]) || goal.equals(station[row].toLowerCase());
+  }
+
+\end{verbatim}
+
+ユーザーから入力されたgoalとstartの値、及びfile内のデータを全て変数に代入しています。
+br.ready()を用いて文字が読込める間ひたすらまわし、行がn(駅数)未満の時は、station[n]に駅名を登録し、
+n行目からはマップデータになるので、それをdata[n][n]に代入しています。
+また、station[n]を登録するついでに、それがgoal,startの文字列と等しいかを判断します。
+それを判断しているのが、した二つのisStationStartName()とisStationGoalNameの真偽判断メソッドです。
+小文字で打ったときや、大文字で打ってしまったときも、駅名が正しければtrueを返すようになっています。
+
+\subsection{StationWay}
+\begin{verbatim}
+private void StationWay(int stationNumber, int cost){
+    int i;
+    if(isStationGoal(stationNumber)){
+      if(isCostLowerThanMinCost(cost)){
+        minCost = cost;
+        route = "";
+        for(i = 0; i < passedStationNumber.size(); i++){
+          route += station[passedStationNumber.get(i)] + "->";
+        }
+        minRoute = route + goal;
+      }
+      return;
+    }
+
+    for(i=0;i<n;i++){
+      if(isStationExist(stationNumber,i) && !isStationAlreadyThrough(i)){
+        if(isStationCostNullOrHigher(stationNumber, cost, i)){
+          stationCost[stationNumber] = cost;
+          cost += data[stationNumber][i];
+          passedStationNumber.add(stationNumber);
+          StationWay(i, cost);
+          cost -= data[stationNumber][i];
+          passedStationNumber.remove(passedStationNumber.size() - 1);
+        }
+      }
+    }
+  }
+
+  private boolean isCostLowerThanMinCost(int cost){
+    return minCost == 0 || minCost > cost;
+  }
+
+  private boolean isStationGoal(int from){
+    return from == goalNumber;
+  }
+
+  private boolean isStationExist(int i, int j){
+    return data[i][j] != 0;
+  }
+
+  private boolean isStationAlreadyThrough(int i){
+    return passedStationNumber.indexOf(i) > -1;
+  }
+
+  private boolean isStationCostNullOrHigher(int stationNumber, int cost, int i){
+    return stationCost[i] == 0 || cost + data[stationNumber][i] <= stationCost[i];
+  }
+\end{verbatim}
+これが最短を求めるコードです。まず真偽判断メソッドからみていきましょう。
+
+\begin{verbatim}
+isCostLowerThanMinCost    -> ゴールにたどり着いたコストが、
+                             最小のコストよりも大きいかそうでないかを調べる
+                             最初は0なので、そのときも真を返す。
+
+isStationGoal             -> 最寄り駅が、ゴールかどうか判断する。
+
+isStationExist            -> 最寄り駅から、その駅に行けるかどうかを判断する
+
+isStationAlreadyThrough   -> その経路を既に通ったかどうかを判断する。
+
+isStationCostNullOrHigher -> 行き先である駅を一度利用した事があるか、
+                             その場合ここまでかかっているコストより
+                             高いコストか否か
+\end{verbatim}
+
+アルゴリズムのところで話したように、メソッド名で何をしたいかわかるようにしました。
+for分の中身を見てみましょう。
+
+\begin{verbatim}
+  for(i=0;i<n;i++){
+    if(isStationExist(stationNumber,i) && !isStationAlreadyThrough(i)){
+      if(isStationCostNullOrHigher(stationNumber, cost, i)){
+        stationCost[stationNumber] = cost;
+        cost += data[stationNumber][i];
+        passedStationNumber.add(stationNumber);
+        StationWay(i, cost);
+        cost -= data[stationNumber][i];
+        passedStationNumber.remove(passedStationNumber.size() - 1);
+      }
+    }
+  }
+\end{verbatim}
+
+最初のifで今いる駅からその先の駅に行けるかの判断及び、既に通ったか否かを判断しています。
+次に、そこまでかかったコストが今まできた他のルートよりも高かったか高くないかを判断し、真が帰ってきたときのみ
+ブロック内に入ります。
+まず、今いる自分の駅までのコストを記憶、次に今いる駅から次の駅に行くまでかかるコストを記憶
+とおった駅として今いる駅を記憶します。そして再び自分自身を呼び出します。
+そしてiが回りきった(どこにもいけなくなった)、もしくはゴールにたどり着いたときに、自分自身をよんだ一つ上のメソッドに戻り、
+その呼び出したコードの下にある
+\begin{verbatim}
+  cost -= data[stationNumber][i];
+  passedStationNumber.remove(passedStationNumber.size() - 1);
+\end{verbatim}
+が実行されます。一つ上のメソッドに戻るということは、つまり、一つ駅を巻き戻す、ということです。
+なので、下の層に行ったときに足したcost及び通った駅を削除しました。
+
+再帰メソッドは、例えばイテレータが4回まで回ったときに次のメソッドがよばれ奥に入り込んで、そこでのイテレータが回りきって上に戻ってきたとき、イテレータは5から再び回り始めます。この性質を上手く用いました。
+
+\begin{verbatim}
+  if(isStationGoal(stationNumber)){
+    if(isCostLowerThanMinCost(cost)){
+      minCost = cost;
+      route = "";
+      for(i = 0; i < passedStationNumber.size(); i++){
+        route += station[passedStationNumber.get(i)] + "->";
+      }
+      minRoute = route + goal;
+    }
+    return;
+  }
+\end{verbatim}
+そして最後にゴールにたどり着いたときのコードです。
+真偽判断をしたあと、minCost に cost 、そしてminRouteに今まで通ってきた駅名に→をたし、最後にgoalの駅名を足してあげれば完了です。
+
+これでコードの説明は終わりです
+\section{実行例}
+
+\begin{verbatim}
+╰─$ time java Search sample4.txt 101
+サンプルデータ内に存在する駅名を入力して下さい
+From?
+mitaka
+To?
+abiko
+Mitaka->Ogikubo->Nakano->Takadanobaba->Ikebukuro->Sugamo->Komagome->Nishinippori->Kitasenju->Matsudo->Kashiwa->abiko
+61
+java -Dfile.encoding=UTF-8 Search sample4.txt 101  1.15s user 0.43s system 39% cpu 3.993 total
+\end{verbatim}
 
 \section{考察}
-今回の授業ではマウスイベント処理を学びました。
-実際に画面で動いたりすると楽しかったです。
-でも、クラス定義が冗長だったりするので僕はRubyのほうが好きだなあと思いました。
-考察することが余り思いつきませんでした。
+真偽判断メソッドのようなものを作らず、平文(地の文)ですべて記述したらもう少し速くなるのかなっと思いました。
+ですが、僕は速さよりも可読性が大事だと考えているので、分けました。
+stationWayの中身もさらにこまかくメソッドとしてわけてもよさそうでした。
+一番上からか、はたまた一つ上の階層に戻って処理を実行するか処理速度に雲泥の差がでるなとおもいました。
+flagではやりませんでしたが、ArrayListを用いて正しかったと思います。
+
 
 \end{document}

@@ -1,10 +1,11 @@
 # Fdb version 3
-["dvipdf"] 1405500316 "report.dvi" "report.pdf" "report" 1405500321
-  "report.dvi" 1405500316 4972 0005120735bba76398276d9de977426f "latex"
+["dvipdf"] 1405532050 "report.dvi" "report.pdf" "report" 1405532053
+  "report.dvi" 1405532050 22716 4eb2e70bbfeb604c8ecf7a6a864e8d08 "latex"
   (generated)
   "report.pdf"
-["latex"] 1405500314 "report.tex" "report.dvi" "report" 1405500321
+["latex"] 1405532048 "report.tex" "report.dvi" "report" 1405532053
   "/usr/local/texlive/2013/texmf-dist/fonts/map/fontname/texfonts.map" 1272929888 3287 e6b82fe08f5336d4d5ebc73fb1152e87 ""
+  "/usr/local/texlive/2013/texmf-dist/fonts/tfm/public/cm/cmbx10.tfm" 1136768653 1328 c834bbb027764024c09d3d2bf908b5f0 ""
   "/usr/local/texlive/2013/texmf-dist/fonts/tfm/public/cm/cmbx12.tfm" 1136768653 1324 c910af8c371558dc20f2d7822f66fe64 ""
   "/usr/local/texlive/2013/texmf-dist/fonts/tfm/public/cm/cmmi12.tfm" 1136768653 1524 4414a8315f39513458b80dfc63bff03a ""
   "/usr/local/texlive/2013/texmf-dist/fonts/tfm/public/cm/cmr12.tfm" 1136768653 1288 655e228510b4c2a1abe905c368440826 ""
@@ -15,13 +16,14 @@
   "/usr/local/texlive/2013/texmf-dist/fonts/tfm/uptex/jis/upjisg-v.tfm" 1336914105 504 db18a8c0bf0b51f5d6237cc98872380d ""
   "/usr/local/texlive/2013/texmf-dist/fonts/tfm/uptex/jis/upjisr-h.tfm" 1336914105 780 9d56a8f9483b0d090553358c515b7835 ""
   "/usr/local/texlive/2013/texmf-dist/fonts/tfm/uptex/jis/upjisr-v.tfm" 1336914105 504 db18a8c0bf0b51f5d6237cc98872380d ""
+  "/usr/local/texlive/2013/texmf-dist/tex/latex/base/omscmr.fd" 1254151887 2109 c400bd6c901edc4a09e4d53fcffd3b3c ""
   "/usr/local/texlive/2013/texmf-dist/tex/platex/base/jarticle.cls" 1274206740 25507 0e6187042be739768097a38c29341b37 ""
   "/usr/local/texlive/2013/texmf-dist/tex/platex/base/jsize10.clo" 1274206740 9588 b611516b14eca6f3c9322f65167c7c24 ""
   "/usr/local/texlive/2013/texmf-dist/web2c/texmf.cnf" 1366045088 31707 0953c15448e216a6585e92ee639d2dc2 ""
   "/usr/local/texlive/2013/texmf-var/web2c/euptex/uplatex.fmt" 1390323554 3971901 c375fdcbe6ad3658d610435360a2e75e ""
   "/usr/local/texlive/2013/texmf.cnf" 1369923207 577 cbc827f6294276973a1952e86e8ad73a ""
-  "report.aux" 1405500316 413 ed627ac9d2466d4314cd4a9116a78c61 ""
-  "report.tex" 1405500310 3036 c50801052104326f0595498a1b811355 ""
+  "report.aux" 1405532050 1527 3dfdc6a581087410edb51f793c416013 ""
+  "report.tex" 1405532044 16657 2363a7e80887e0e6c908005d5b9cd673 ""
   (generated)
   "report.dvi"
   "report.aux"

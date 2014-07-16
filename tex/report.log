@@ -1,4 +1,4 @@
-This is e-upTeX, Version 3.1415926-p3.4-u1.11-110825-2.6 (utf8.uptex) (TeX Live 2013) (format=uplatex 2014.1.22)  16 JUL 2014 17:45
+This is e-upTeX, Version 3.1415926-p3.4-u1.11-110825-2.6 (utf8.uptex) (TeX Live 2013) (format=uplatex 2014.1.22)  17 JUL 2014 02:34
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -146,14 +146,102 @@ LaTeX Font Info:    Font shape `JY2/mc/bx/n' in size <12> not available
 (Font)              Font shape `JY2/gt/m/n' tried instead on input line 12.
 LaTeX Font Info:    Font shape `JY2/gt/m/n' will be
 (Font)              scaled to size 11.54663pt on input line 12.
- [1] [2] (./report.aux) ) 
-Here is how much of TeX's memory you used:
- 272 strings out of 494001
- 2889 string characters out of 6154441
- 60831 words of memory out of 5000000
- 3813 multiletter control sequences out of 15000+600000
- 9080 words of font info for 45 fonts, out of 8000000 for 9000
- 745 hyphenation exceptions out of 8191
- 24i,6n,19p,289b,227s stack positions out of 5000i,500n,10000p,200000b,80000s
+LaTeX Font Info:    Font shape `JT2/mc/bx/n' in size <10> not available
+(Font)              Font shape `JT2/gt/m/n' tried instead on input line 18.
+LaTeX Font Info:    Font shape `JT2/gt/m/n' will be
+(Font)              scaled to size 9.6222pt on input line 18.
+LaTeX Font Info:    Font shape `JY2/mc/bx/n' in size <10> not available
+(Font)              Font shape `JY2/gt/m/n' tried instead on input line 18.
+LaTeX Font Info:    Font shape `JY2/gt/m/n' will be
+(Font)              scaled to size 9.6222pt on input line 18.
+ [1]
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 53.
 
-Output written on report.dvi (3 pages, 4972 bytes).
+(/usr/local/texlive/2013/texmf-dist/tex/latex/base/omscmr.fd
+File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
+)
+LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 53.
+ [2] [3]
+Overfull \hbox (35.24684pt too wide) in paragraph at lines 160--160
+[]      \OT1/cmtt/m/n/10 input = new BufferedReader (new InputStreamReader (Sys
+tem.in));[] 
+ []
+
+
+Overfull \hbox (35.24684pt too wide) in paragraph at lines 160--160
+[]      \OT1/cmtt/m/n/10 input = new BufferedReader (new InputStreamReader (Sys
+tem.in));[] 
+ []
+
+[4] [5]
+Overfull \hbox (103.49625pt too wide) in paragraph at lines 207--207
+[]    \OT1/cmtt/m/n/10 return start.equals(station[row]) || start.equals(statio
+n[row].toLowerCase());[] 
+ []
+
+
+Overfull \hbox (92.99634pt too wide) in paragraph at lines 207--207
+[]    \OT1/cmtt/m/n/10 return goal.equals(station[row]) || goal.equals(station[
+row].toLowerCase());[] 
+ []
+
+
+Overfull \hbox (56.24666pt too wide) in paragraph at lines 265--265
+[]      \OT1/cmtt/m/n/10 if(isStationExist(stationNumber,i) && !isStationAlread
+yThrough(i)){[] 
+ []
+
+[6]
+Overfull \hbox (35.24684pt too wide) in paragraph at lines 265--265
+[]          \OT1/cmtt/m/n/10 passedStationNumber.remove(passedStationNumber.siz
+e() - 1);[] 
+ []
+
+
+Overfull \hbox (92.99634pt too wide) in paragraph at lines 265--265
+[]  \OT1/cmtt/m/n/10 private boolean isStationCostNullOrHigher(int stationNumbe
+r, int cost, int i){[] 
+ []
+
+
+Overfull \hbox (103.49625pt too wide) in paragraph at lines 265--265
+[]    \OT1/cmtt/m/n/10 return stationCost[i] == 0 || cost + data[stationNumber]
+[i] <= stationCost[i];[] 
+ []
+
+[7]
+Overfull \hbox (45.74675pt too wide) in paragraph at lines 300--300
+[]    \OT1/cmtt/m/n/10 if(isStationExist(stationNumber,i) && !isStationAlreadyT
+hrough(i)){[] 
+ []
+
+
+Overfull \hbox (24.74693pt too wide) in paragraph at lines 300--300
+[]        \OT1/cmtt/m/n/10 passedStationNumber.remove(passedStationNumber.size(
+) - 1);[] 
+ []
+
+[8]
+Overfull \hbox (281.99469pt too wide) in paragraph at lines 347--347
+[]\OT1/cmtt/m/n/10 Mitaka->Ogikubo->Nakano->Takadanobaba->Ikebukuro->Sugamo->Ko
+magome->Nishinippori->Kitasenju->Matsudo->Kashiwa->abiko[] 
+ []
+
+
+Overfull \hbox (166.4957pt too wide) in paragraph at lines 347--347
+[]\OT1/cmtt/m/n/10 java -Dfile.encoding=UTF-8 Search sample4.txt 101  1.15s use
+r 0.43s system 39% cpu 3.993 total[] 
+ []
+
+[9] (./report.aux) ) 
+Here is how much of TeX's memory you used:
+ 293 strings out of 494001
+ 3240 string characters out of 6154441
+ 60831 words of memory out of 5000000
+ 3830 multiletter control sequences out of 15000+600000
+ 9388 words of font info for 46 fonts, out of 8000000 for 9000
+ 745 hyphenation exceptions out of 8191
+ 24i,6n,19p,315b,314s stack positions out of 5000i,500n,10000p,200000b,80000s
+
+Output written on report.dvi (10 pages, 22716 bytes).
